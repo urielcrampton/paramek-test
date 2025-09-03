@@ -1,10 +1,20 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os, psycopg2, psycopg2.extras, requests
 
 app = FastAPI(title="WTI API")
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://wti:wti@localhost:5433/wti")
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000", "http://127.0.0.1:3001"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://wti:wti@localhost:5434/wti")
 COUNTRIES_API_BASE = os.getenv("COUNTRIES_API_BASE", "https://restcountries.com/v3.1")
 
 def get_conn():
@@ -20,6 +30,10 @@ class TripIn(BaseModel):
 @app.get("/health")
 def health():
     return {"ok": True}
+
+@app.get("/")
+def root():
+    return {"message": "WTI API is running", "version": "1.0.0"}
 
 # --- Countries proxy (API pública) ---
 @app.get("/countries")
