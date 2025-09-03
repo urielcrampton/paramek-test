@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - paramek-network
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://wti:wti@db:5433/wti
+      - COUNTRIES_API_BASE=https://restcountries.com/v3.1
+    volumes:
+      - ./apps/api:/app
+    depends_on:
+      - db
+    networks:
+      - paramek-network
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: wti
+      POSTGRES_PASSWORD: wti
+      POSTGRES_DB: wti
+    ports: ["5433:5433"]
+    volumes: ["./db/data:/var/lib/postgresql/data","./db/migrations:/docker-entrypoint-initdb.d"]
+    networks:
+      - paramek-network
+
+networks:
+  paramek-network:
+    driver: bridge

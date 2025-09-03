@@ -1,0 +1,17 @@
+{
+  "name": "@paramek-test/api",
+  "version": "1.0.0",
+  "description": "FastAPI backend for Paramek Test",
+  "private": true,
+  "scripts": {
+    "dev": "uvicorn main:app --host 0.0.0.0 --port 8000 --reload",
+    "start": "uvicorn main:app --host 0.0.0.0 --port 8000",
+    "build": "echo 'No build step required for Python'",
+    "test": "pytest",
+    "lint": "echo 'Add flake8 or black for linting'",
+    "clean": "rm -rf __pycache__ .pytest_cache"
+  },
+  "engines": {
+    "python": ">=3.8"
+  }
+}
