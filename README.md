@@ -214,26 +214,6 @@ When the backend is running, visit:
 - `PUT /trips/{id}` - Update a trip
 - `DELETE /trips/{id}` - Delete a trip
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-1. **Port conflicts**: Make sure ports 3000 and 8000 are available
-2. **Node version**: Ensure you're using Node.js 18+
-3. **Python version**: Ensure you're using Python 3.8+
-4. **Docker issues**: Make sure Docker is running and you have sufficient resources
 
 ### Getting Help
 
