@@ -24,7 +24,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://wti:wti@db:5433/wti
+      - DATABASE_URL=postgresql://wti:wti@db:5432/wti
       - COUNTRIES_API_BASE=https://restcountries.com/v3.1
     volumes:
       - ./apps/api:/app
@@ -38,7 +38,7 @@ services:
       POSTGRES_USER: wti
       POSTGRES_PASSWORD: wti
       POSTGRES_DB: wti
-    ports: ["5433:5433"]
+    ports: ["5433:5432"]
     volumes: ["./db/data:/var/lib/postgresql/data","./db/migrations:/docker-entrypoint-initdb.d"]
     networks:
       - paramek-network

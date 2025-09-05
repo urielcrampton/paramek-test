@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://wti:wti@localhost:5434/wti")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://wti:wti@db:5432/wti")
 COUNTRIES_API_BASE = os.getenv("COUNTRIES_API_BASE", "https://restcountries.com/v3.1")
 
 def get_conn():
@@ -38,12 +38,30 @@ def root():
 # --- Countries proxy (API pública) ---
 @app.get("/countries")
 def countries(q: str = ""):
-    url = f"{COUNTRIES_API_BASE}/name/{q}" if q else f"{COUNTRIES_API_BASE}/all"
-    r = requests.get(url, timeout=10)
-    r.raise_for_status()
-    # reduce payload
-    data = [{"name": x.get("name",{}).get("common"), "cca2": x.get("cca2"), "flag": x.get("flag")} for x in r.json()]
-    return [d for d in data if d["name"]]
+    # Static list of popular countries for demo purposes
+    popular_countries = [
+        {"name": "Spain", "cca2": "ES", "flag": "🇪🇸"},
+        {"name": "France", "cca2": "FR", "flag": "🇫🇷"},
+        {"name": "Germany", "cca2": "DE", "flag": "🇩🇪"},
+        {"name": "Italy", "cca2": "IT", "flag": "🇮🇹"},
+        {"name": "Portugal", "cca2": "PT", "flag": "🇵🇹"},
+        {"name": "Mexico", "cca2": "MX", "flag": "🇲🇽"},
+        {"name": "Argentina", "cca2": "AR", "flag": "🇦🇷"},
+        {"name": "Brazil", "cca2": "BR", "flag": "🇧🇷"},
+        {"name": "United States", "cca2": "US", "flag": "🇺🇸"},
+        {"name": "Canada", "cca2": "CA", "flag": "🇨🇦"},
+        {"name": "United Kingdom", "cca2": "GB", "flag": "🇬🇧"},
+        {"name": "Japan", "cca2": "JP", "flag": "🇯🇵"},
+        {"name": "Australia", "cca2": "AU", "flag": "🇦🇺"},
+        {"name": "Netherlands", "cca2": "NL", "flag": "🇳🇱"},
+        {"name": "Switzerland", "cca2": "CH", "flag": "🇨🇭"}
+    ]
+    
+    if q:
+        # Filter countries by search query
+        return [country for country in popular_countries if q.lower() in country["name"].lower()]
+    else:
+        return popular_countries
 
 # --- CRUD Trips, SQL crudo + stored procedures ---
 @app.get("/trips")
